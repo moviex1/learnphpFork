@@ -5,17 +5,17 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: programwithgio-app
+    container_name: moviex-app
     restart: always
     working_dir: /var/www/
     volumes:
       - ../src:/var/www
   nginx:
     image: nginx:1.19-alpine
-    container_name: programwithgio-nginx
+    container_name: moviex-nginx
     restart: always
     ports:
-      - 8000:80
+      - "8000:80"
     volumes:
       - ../src:/var/www
       - ./nginx:/etc/nginx/conf.d
