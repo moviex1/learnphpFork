@@ -4,13 +4,11 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+$obj = new class(1,2,3){
 
-use Namespaces\Interfaces\CollectionAgency;
-use Namespaces\Interfaces\CollectorService;
-use Namespaces\Interfaces\Rocky;
+    public function __construct(public int $x, public int $y, public int $z)
+    {
+    }
+};
 
-$collectorService = new CollectorService();
-$collectorAgency = new CollectionAgency();
-$rocky = new Rocky();
-
-echo $collectorService->collectDebt($rocky) . PHP_EOL;
+var_dump($obj);
