@@ -3,6 +3,8 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
+session_start();
+
 use Namespaces\Server\Routes;
 
 
@@ -17,4 +19,6 @@ $router
 
 
 $router->resolve($_SERVER['REQUEST_URI'], strtolower($_SERVER['REQUEST_METHOD']));
+
+var_dump($_COOKIE);
 

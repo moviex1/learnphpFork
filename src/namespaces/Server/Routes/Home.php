@@ -6,9 +6,12 @@ class Home
 {
     public function index() : void
     {
+        setcookie(
+            'UserName',
+            'Nikita',
+            time() + 10
+        );
         echo '<pre>';
-        var_dump($_GET);
-        var_dump($_POST);
         echo 'Home';
     }
 
