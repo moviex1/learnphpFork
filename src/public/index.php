@@ -1,24 +1,28 @@
 <?php declare(strict_types=1);
 
-
 require_once __DIR__ . "/../vendor/autoload.php";
 
-session_start();
+const STORAGE_PATH = __DIR__ . '/../storage';
+const VIEWS_PATH = __DIR__ . '/../Views';
 
-use Namespaces\Server\Routes;
+try {
+    $router = new Namespaces\Server\Router;
+
+    $router
+        ->get('/', [App\Controllers\HomeController::class, 'index'])
+        ->get('/download', [App\Controllers\HomeController::class, 'download'])
+        ->post('/upload', [App\Controllers\HomeController::class, 'upload'])
+        ->get('/invoices', [App\Controllers\InvoicesController::class, 'index'])
+        ->get('/invoices/create', [App\Controllers\InvoicesController::class, 'create'])
+        ->post('/invoices/create', [App\Controllers\InvoicesController::class, 'store'])
+        ->get('/info', [Namespaces\Server\Routes\Info::class, 'showInfo']);
 
 
-$router = new Namespaces\Server\Router;
+    echo $router->resolve($_SERVER['REQUEST_URI'], strtolower($_SERVER['REQUEST_METHOD']));
+} catch (\Namespaces\Server\Exceptions\RouteNotFoundException $e){
+    http_response_code(404);
 
-$router
-    ->get('/', [Routes\Home::class, 'index'])
-    ->get('/invoices', [Routes\Invoices::class, 'index'])
-    ->get('/invoices/create', [Routes\Invoices::class, 'create'])
-    ->post('/invoices/create', [Routes\Invoices::class, 'store'])
-    ->get('/info', [Routes\Info::class, 'showInfo']);
+    echo \App\Controllers\View::make('error/pageNotFound');
+}
 
-
-$router->resolve($_SERVER['REQUEST_URI'], strtolower($_SERVER['REQUEST_METHOD']));
-
-var_dump($_COOKIE);
 
