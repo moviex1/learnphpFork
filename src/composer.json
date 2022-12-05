@@ -1,6 +1,7 @@
 {
     "require": {
-        "ramsey/uuid": "^4.6"
+        "ramsey/uuid": "^4.6",
+      "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {
