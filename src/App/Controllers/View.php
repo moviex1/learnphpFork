@@ -27,6 +27,8 @@ class View
            throw new ViewNotFoundException();
         }
 
+        extract($this->params);
+
         ob_start();
 
         include $viewPath;
@@ -37,6 +39,11 @@ class View
     public function __toString(): string
     {
        return $this->render();
+    }
+
+    public function __get(string $name)
+    {
+        return $this->params[$name] ?? null;
     }
 
 }

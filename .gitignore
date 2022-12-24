@@ -1,4 +1,5 @@
 .idea
-.env
+src/.env
 vendor
 composer.json
+.env

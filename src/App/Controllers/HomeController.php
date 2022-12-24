@@ -2,56 +2,42 @@
 
 namespace App\Controllers;
 
-use App\Exceptions\ViewNotFoundException;
-use PDO;
+use App\App;
+use App\Models\Invoice;
+use App\Models\SignUp;
+use App\Models\User;
 
 class HomeController
 
 {
-    public function index() : View
+    public function index(): View
     {
-        try{
+        $email = 'Bfar25@mail.com';
+        $name = 'Bernardii';
+        $amount = 25;
 
+        $userModel = new User();
+        $invoiceModel = new Invoice();
 
-        $db = new PDO('mysql:host=db;dbname=my_db', 'root', 'root', [
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
-        ]);
+        $invoiceId = (new SignUp($userModel, $invoiceModel))->register(
+            [   'email' => $email,
+                'name' => $name],
 
-        $email = 'moviex@gmail.com';
-        $name = 'Nikita Zubkov';
-        $isActive = 1;
-        $createdAt = date('Y-m-d H:m:i', strtotime('07/11/2022 9:00PM'));
-        $query = 'INSERT INTO users (email, full_name,is_active, created_at)
-                  VALUES (:email, :name, :active, :date)';
+            [   'amount' => $amount]
+        );
 
-
-        $stmt = $db->prepare($query);
-        $stmt->execute([
-            'email' => $email,
-            'name' => $name,
-            'active' => $isActive,
-            'date' => $createdAt]);
-        $id = (int) $db->lastInsertId();
-
-        $user = $db->query('SELECT * FROM users WHERE id = ' . $id)->fetch();
-
-        echo '<pre>';
-        var_dump($user);
-        echo '</pre>';
-        } catch (\PDOException $e){
-            throw new \PDOException($e->getMessage(), $e->getCode());
-        }
-        return View::make('index');
+        return View::make('index', ['invoice' => $invoiceModel->find($invoiceId)]);
     }
 
-    public function download(){
+    public function download()
+    {
         header('Content-type: multipart/form-data');
         header('Content-disposition: attachment; filename="image.png"');
 
         readfile(STORAGE_PATH . '/image-12.png');
     }
 
-    public function upload () : void
+    public function upload(): void
     {
         $filePath = STORAGE_PATH . '/' . $_FILES['wallpaper']['name'];
         move_uploaded_file(
@@ -62,3 +48,4 @@ class HomeController
     }
 
 }
+
